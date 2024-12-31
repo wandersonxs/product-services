@@ -1,35 +1,67 @@
 pipeline {
-    agent any 
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'wxesquevixos/product-services'
+        DOCKER_TAG = 'latest'
+    }
+
     stages {
-        stage('Static Analysis') {
+        stage('Checkout') {
             steps {
-                echo 'Run the static analysis to the code 3' 
+                echo 'Checking out code...'
+                git branch: 'main', url: 'https://github.com/wandersonxs/product-services.git'
             }
         }
-        stage('Compile') {
+        stage('Build') {
             steps {
-                echo 'Compile the source code' 
+                echo 'Building the application...'
+                sh 'mvn clean package -DskipTests'
             }
         }
-        stage('Security Check') {
+        stage('Test') {
             steps {
-                echo 'Run the security check against the application' 
+                echo 'Running tests...'
+                sh 'mvn test'
             }
         }
-        stage('Run Unit Tests') {
-            steps {
-                echo 'Run unit tests from the source code' 
-            }
+//         stage('Build Docker Image') {
+//             steps {
+//                 echo 'Building Docker image...'
+//                 sh """
+//                 docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+//                 """
+//             }
+//         }
+//         stage('Push Docker Image') {
+//             steps {
+//                 echo 'Pushing Docker image to Docker Hub...'
+//                 script {
+//                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+//                         sh """
+//                         docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+//                         """
+//                     }
+//                 }
+//             }
+//         }
+//         stage('Deploy to Minikube') {
+//             steps {
+//                 echo 'Deploying to Minikube...'
+//                 sh """
+//                 kubectl apply -f k8s/deployment.yaml
+//                 kubectl apply -f k8s/service.yaml
+//                 """
+//             }
+//         }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
         }
-        stage('Run Integration Tests') {
-            steps {
-                echo 'Run only crucial integration tests from the source code' 
-            }
-        }
-        stage('Publish Artifacts') {
-            steps {
-                echo 'Save the assemblies generated from the compilation' 
-            }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
