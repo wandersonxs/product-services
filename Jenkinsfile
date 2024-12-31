@@ -42,18 +42,18 @@ pipeline {
                 """
             }
         }
-//         stage('Push Docker Image') {
-//             steps {
-//                 echo 'Pushing Docker image to Docker Hub...'
-//                 script {
-//                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-//                         sh """
-//                         docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
-//                         """
-//                     }
-//                 }
-//             }
-//         }
+        stage('Push Docker Image') {
+            steps {
+                echo 'Pushing Docker image to Docker Hub...'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        sh """
+                        docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        """
+                    }
+                }
+            }
+        }
 //         stage('Deploy to Minikube') {
 //             steps {
 //                 echo 'Deploying to Minikube...'
