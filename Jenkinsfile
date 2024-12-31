@@ -1,4 +1,9 @@
 pipeline {
+//      agent {
+//             docker {
+//                 image 'maven:3.9.7-eclipse-temurin-21-alpine'
+//             }
+//         }
     agent any
     tools {
         maven 'Maven3'
@@ -27,14 +32,14 @@ pipeline {
                 sh 'mvn test'
             }
         }
-//         stage('Build Docker Image') {
-//             steps {
-//                 echo 'Building Docker image...'
-//                 sh """
-//                 docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-//                 """
-//             }
-//         }
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh """
+                docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                """
+            }
+        }
 //         stage('Push Docker Image') {
 //             steps {
 //                 echo 'Pushing Docker image to Docker Hub...'
