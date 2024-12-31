@@ -54,15 +54,16 @@ pipeline {
                 }
             }
         }
-//         stage('Deploy to Minikube') {
-//             steps {
-//                 echo 'Deploying to Minikube...'
-//                 sh """
-//                 kubectl apply -f k8s/deployment.yaml
-//                 kubectl apply -f k8s/service.yaml
-//                 """
-//             }
-//         }
+        stage('Deploy to Minikube') {
+            steps {
+                echo 'Deploying to Minikube...'
+                sh """
+                kubectl apply -f kubernetes/product-services-deployment.yaml
+                kubectl apply -f kubernetes/product-services-service.yaml
+                kubectl apply -f kubernetes/product-services-ingress.yaml
+                """
+            }
+        }
     }
 
     post {
