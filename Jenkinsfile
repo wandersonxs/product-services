@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        maven 'Maven3'
+    }
     environment {
         DOCKER_IMAGE = 'wxesquevixos/product-services'
         DOCKER_TAG = 'latest'
